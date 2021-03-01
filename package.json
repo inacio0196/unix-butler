@@ -10,7 +10,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@nozbe/watermelondb": "^0.20.0",
+    "@nozbe/with-observables": "^1.0.8",
+    "chalk": "^4.1.0",
+    "clui": "^0.3.6",
+    "configstore": "^5.0.1",
+    "inquirer": "^8.0.0",
+    "minimist": "^1.2.5",
     "pdf-parse": "^1.1.1",
-    "prompts": "^2.4.0"
+    "prompts": "^2.4.0",
+    "shelljs": "^0.8.4"
+  },
+  "devDependencies": {
+    "better-sqlite3": "^7.1.2"
   }
 }
