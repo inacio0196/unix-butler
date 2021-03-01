@@ -21,7 +21,14 @@ async function renderQuetions () {
     {
       type: 'text',
       name: 'nick',
-      message: 'Diga-me seu apelido.'
+      message: 'Diga-me seu apelido.',
+      validate: value => {
+        if (value) {
+          return true
+        } else {
+          return 'Seu apelido é obrigatório*'
+        }
+      },
     },
     {
       type: 'text',
