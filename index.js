@@ -1,6 +1,7 @@
 const Configstore = require('configstore');
 const log = console.log;
 const manager = require('./src/actions/manager');
+const shelljs = require('shelljs')
 
 const fileUtils = require('./src/utils/fileUtils');
 

@@ -1,36 +1,43 @@
 const weatherApi = require('../services/weatherApi');
-var CLI = require('clui'),
-    clc = require('cli-color');
+const shelljs = require('shelljs')
+const log = console.log
+const chalk = require('chalk')
+const Configstore = require('configstore');
 
-var Line          = CLI.Line,
-    LineBuffer    = CLI.LineBuffer;
+const store = new Configstore('unix-butler', {});
+const username = store.get('userName')
 
-var outputBuffer = new LineBuffer({
-  x: 0,
-  y: 0,
-  width: 'console',
-  height: 'console'
-});
+function renderWeatherInfo (data) {
+  const {
+    temp,
+    date,
+    time,
+    description,
+    city_name,
+    currently,
+    humidity,
+    sunset,
+    sunrise,
+  } = data.results
 
-function renderColumns (data) {
-  var message = new Line(outputBuffer)
-      .column('Previsão', 20, [clc.green])
-      .fill()
-      .store()
+  shelljs.exec('echo "Localidade Data Hora Temperatura Clima Periodo Humidade Nascer-doSol Por-do-Sol" >> /tmp/weather.txt')
+  shelljs.exec(`echo "${city_name} ${date} ${time} ${temp} ${description} ${currently} ${humidity} ${sunrise.replace(/\s/g, '')} ${sunset.replace(/\s/g, '')}" >> /tmp/weather.txt`)
+  log(chalk.green(`Eis a previão do tempo para hoje, ${username}.\n`))
+  shelljs.exec('column -t /tmp/weather.txt')
+  shelljs.exec('rm /tmp/weather.txt')
 
-      var blankLine = new Line(outputBuffer)
-        .fill()
-        .store()
+  const forecastWeek = data.results.forecast.map(forecast => ({
+    weekDayName: forecast.weekday,
+    weekDayDate: forecast.date,
+    climate: forecast.description,
+  }))
 
-    var line = new Line(outputBuffer)
-      .column((Math.random()*100).toFixed(3), 20)
-      .column((Math.random()*100).toFixed(3), 20)
-      .column((Math.random()*100).toFixed(3), 20)
-      .column((Math.random()*100).toFixed(3), 11)
-      .fill()
-      .store()
+  log(chalk.green(`E também para os próximos dias.\n`))
 
-    outputBuffer.output();
+  forecastWeek.forEach(forecast => {
+    log(`${forecast.weekDayName} ${forecast.weekDayDate}`)
+    log(`Clima: ${forecast.climate}\n`)
+  })
 }
 
 module.exports = {
@@ -39,8 +46,7 @@ module.exports = {
 
     if (response.data) {
       const forecast = response.data
-      console.log(forecast)
-      renderColumns(forecast)    
+      renderWeatherInfo(forecast)    
     }
   },
 }
