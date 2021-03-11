@@ -1,18 +1,14 @@
-const Configstore = require('configstore');
-const log = console.log;
-const manager = require('./src/actions/manager');
-const shelljs = require('shelljs')
-
-const fileUtils = require('./src/utils/fileUtils');
+const bcrypt = require('bcrypt');
 
 const hello = require('./src/actions/hello');
+const manager = require('./src/actions/manager');
+const brain = require('./src/utils/butlerBrain');
 
-const store = new Configstore('unix-butler', {});
+const hasBrain = brain.getBrain()
 
-const firstUseComplete = store.get('firstUseComplete')
-
-  if (firstUseComplete) {
-    manager.previsao()
-  } else {
-    hello()
-  }
+if (!hasBrain) {
+  console.log('tem')
+  // manager.previsao()
+} else {
+  hello()
+}

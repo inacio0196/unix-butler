@@ -1,0 +1,1 @@
+link conjugações de verbos(fazer webscrapping em shellscript): https://www.conjugacao.com.br/verbo-${verbo}/
